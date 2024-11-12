@@ -36,11 +36,33 @@ function consultarCidade() {
             const umidade = data.main.humidity;
             const vento = data.wind.speed;
             const condicao = data.weather[0].main;
+            const descricao = data.weather[0].description;
+
+            const descricaoPortugues = {
+                "clear sky": "céu limpo",
+                "few clouds": "poucas nuvens",
+                "scattered clouds": "nuvens dispersas",
+                "broken clouds": "nuvens quebradas",
+                "shower rain": "chuva leve",
+                "rain": "chuva",
+                "thunderstorm": "tempestade",
+                "snow": "neve",
+                "mist": "névoa",
+                "overcast clouds": "nublado"
+            };
+
+            const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+            const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+
+            const descricaoTraduzida = descricaoPortugues[descricao.toLowerCase()] || descricao;
 
             document.getElementById("temp-resultado").textContent = `🌡️ Temperatura: ${temperatura.toFixed(1)}°`;
             document.getElementById("temp-maxmin").textContent = `📈 Máx: ${tempMax.toFixed(1)}°, 📉 Mín: ${tempMin.toFixed(1)}°`;
             document.getElementById("umidade").textContent = `💧 Umidade: ${umidade}%`;
             document.getElementById("vento").textContent = `💨 Vento: ${vento} m/s`;
+            document.getElementById("weather-description").textContent = descricaoTraduzida.charAt(0).toUpperCase() + descricaoTraduzida.slice(1);
+            document.getElementById("sunrise").textContent = `🌅 Nascer do Sol: ${sunrise}`;
+            document.getElementById("sunset").textContent = `🌇 Pôr do Sol: ${sunset}`;
 
             const weatherIcon = document.getElementById("weather-icon");
             if (condicao === "Clear") {

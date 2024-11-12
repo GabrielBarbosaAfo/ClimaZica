@@ -92,6 +92,15 @@ button {
     animation: bounce 1s infinite alternate;
 }
 
+#weather-description {
+    font-size: 1.2em;
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+
 @keyframes bounce {
     0% { transform: translateY(0); }
     100% { transform: translateY(-10px); }
