@@ -1,94 +1,65 @@
-// index.js
-document.getElementById('consultar').addEventListener('click', consultarCidade);
-document.getElementById('cidade').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        consultarCidade();
-    }
-});
-
-function consultarCidade() {
-    const cidade = document.getElementById("cidade").value;
-    const unidade = document.getElementById("unidade").value;
-    const apiKey = '30bc33d885f1686e73d308a7edfda583'; 
-
-    if (!cidade) {
-        alert("Por favor, insira o nome da cidade.");
-        return;
-    }
-
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=${unidade}&appid=${apiKey}`;
-    
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
-
-            if (data.cod !== 200) {
-                alert("Cidade não encontrada!");
-                return;
-            }
-
-            const temperatura = data.main.temp;
-            const tempMin = data.main.temp_min;
-            const tempMax = data.main.temp_max;
-            const umidade = data.main.humidity;
-            const vento = data.wind.speed;
-            const condicao = data.weather[0].main;
-            const descricao = data.weather[0].description;
-
-            const descricaoPortugues = {
-                "clear sky": "céu limpo",
-                "few clouds": "poucas nuvens",
-                "scattered clouds": "nuvens dispersas",
-                "broken clouds": "nuvens quebradas",
-                "shower rain": "chuva leve",
-                "rain": "chuva",
-                "thunderstorm": "tempestade",
-                "snow": "neve",
-                "mist": "névoa",
-                "overcast clouds": "nublado"
-            };
-
-            const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
-            const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
-
-            const descricaoTraduzida = descricaoPortugues[descricao.toLowerCase()] || descricao;
-
-            document.getElementById("temp-resultado").textContent = `🌡️ Temperatura: ${temperatura.toFixed(1)}°`;
-            document.getElementById("temp-maxmin").textContent = `📈 Máx: ${tempMax.toFixed(1)}°, 📉 Mín: ${tempMin.toFixed(1)}°`;
-            document.getElementById("umidade").textContent = `💧 Umidade: ${umidade}%`;
-            document.getElementById("vento").textContent = `💨 Vento: ${vento} m/s`;
-            document.getElementById("weather-description").textContent = descricaoTraduzida.charAt(0).toUpperCase() + descricaoTraduzida.slice(1);
-            document.getElementById("sunrise").textContent = `🌅 Nascer do Sol: ${sunrise}`;
-            document.getElementById("sunset").textContent = `🌇 Pôr do Sol: ${sunset}`;
-
-            const weatherIcon = document.getElementById("weather-icon");
-            if (condicao === "Clear") {
-                weatherIcon.textContent = "☀️";
-            } else if (condicao === "Clouds") {
-                weatherIcon.textContent = "☁️";
-            } else if (condicao === "Rain" || condicao === "Drizzle") {
-                weatherIcon.textContent = "🌧️";
-            } else if (condicao === "Thunderstorm") {
-                weatherIcon.textContent = "⛈️";
-            } else if (condicao === "Snow") {
-                weatherIcon.textContent = "❄️";
-            } else {
-                weatherIcon.textContent = "🌫️"; 
-            }
-
-            document.getElementById("resultado").style.display = "block";
-
-        } else {
-            alert("Erro ao buscar dados do clima. Tente novamente.");
+document.addEventListener("DOMContentLoaded", () => {
+    const API_KEY = "30bc33d885f1686e73d308a7edfda583";
+  
+    const tempValue = document.getElementById("temp-value");
+    const maxTemp = document.getElementById("max-temp");
+    const minTemp = document.getElementById("min-temp");
+    const humidity = document.getElementById("humidity");
+    const windSpeed = document.getElementById("wind-speed");
+    const body = document.body;
+  
+    const cityInput = document.getElementById("city-input");
+    const searchButton = document.getElementById("search-button");
+  
+    // Função para buscar os dados da API
+    async function fetchWeatherData(city) {
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+        );
+        if (!response.ok) {
+          throw new Error("City not found!");
         }
-    };
-
-    xhr.onerror = function() {
-        alert("Erro de conexão. Verifique sua rede.");
-    };
-
-    xhr.send();
-}
+        const data = await response.json();
+        updateWeatherInfo(data);
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  
+    // Função para atualizar o layout com os dados
+    function updateWeatherInfo(data) {
+      const temperature = Math.round(data.main.temp);
+      const tempMax = Math.round(data.main.temp_max);
+      const tempMin = Math.round(data.main.temp_min);
+      const humidityValue = data.main.humidity;
+      const windSpeedValue = Math.round(data.wind.speed * 3.6); // Convertendo m/s para km/h
+  
+      // Atualizando os elementos
+      tempValue.textContent = `${temperature}°C`;
+      maxTemp.textContent = `Max: ${tempMax}°C`;
+      minTemp.textContent = `Min: ${tempMin}°C`;
+      humidity.textContent = `Humidity: ${humidityValue}%`;
+      windSpeed.textContent = `Wind: ${windSpeedValue} km/h`;
+  
+      // Alterando a cor de fundo com base na temperatura
+      if (temperature < 15) {
+        body.style.backgroundColor = "#ADD8E6"; // Light Blue
+      } else if (temperature <= 25) {
+        body.style.backgroundColor = "#FFD700"; // Gold
+      } else {
+        body.style.backgroundColor = "#FF4500"; // Orange Red
+      }
+    }
+  
+    // Adicionando o evento de clique no botão
+    searchButton.addEventListener("click", () => {
+      const city = cityInput.value.trim();
+      if (city) {
+        fetchWeatherData(city);
+      } else {
+        alert("Please enter a city name!");
+      }
+    });
+  });
+  
