@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Clima</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de Clima</h1>
+        <input type="text" id="cidade" placeholder="Digite o nome da cidade">
+        
+        <label for="unidade">🌡️ Selecione a unidade de temperatura:</label>
+        <select id="unidade">
+            <option value="metric">Celsius (°C)</option>
+            <option value="imperial">Fahrenheit (°F)</option>
+            <option value="standard">Kelvin (K)</option>
+        </select>
+
+        <button id="consultar">Consultar</button>
+
+        <div id="resultado">
+            <div id="weather-icon" class="resultado-item"></div>
+            <div class="resultado-row">
+                <div id="temp-resultado" class="resultado-item"></div>
+                <div id="temp-maxmin" class="resultado-item"></div>
+            </div>
+            <div class="resultado-row">
+                <div id="umidade" class="resultado-item"></div>
+                <div id="vento" class="resultado-item"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script> 
+</body>
+</html>
