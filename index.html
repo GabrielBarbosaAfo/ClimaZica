@@ -3,23 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather App</title>
+  <title>ClimaZica</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
   <div class="weather-container">
-    <!-- Campo para inserir a cidade -->
-    <div class="search-bar">
+    <div class="search-bar">  
       <input type="text" id="city-input" placeholder="Enter city name" />
       <button id="search-button">Search</button>
     </div>
 
-    <!-- Informações do clima -->
+    <div class="unit-selector">
+      <label for="unit-selector">Temperature Unit:</label>
+      <select id="unit-selector">
+        <option value="metric" selected>Celsius</option>
+        <option value="imperial">Fahrenheit</option>
+        <option value="standard">Kelvin</option>
+      </select>
+    </div>
+
     <div class="weather-info">
       <div class="temperature">
         <span id="temp-value">--°C</span>
+        <img id="weather-icon" src="" alt="Weather icon" />
       </div>
       <div class="weather-details">
         <div class="detail">
@@ -38,7 +46,16 @@
           <i class="fas fa-wind"></i>
           <span id="wind-speed">Wind: -- km/h</span>
         </div>
+        <div class="detail">
+          <i class="fas fa-sun"></i>
+          <span id="sunrise">Sunrise: --:--</span>
+        </div>
+        <div class="detail">
+          <i class="fas fa-moon"></i>
+          <span id="sunset">Sunset: --:--</span>
+        </div>
       </div>
+      
     </div>
   </div>
   <script src="index.js"></script>
